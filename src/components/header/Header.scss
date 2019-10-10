@@ -1,0 +1,15 @@
+@import '../../styles/main.scss';
+
+.app-header {
+    background-color: #282c34;
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+
+    padding-left: 24px;
+
+    &-link {
+        color: $primary-color;
+    }
+}
