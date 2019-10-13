@@ -1,9 +1,18 @@
 import React from 'react';
+import GameBoard from '../../components/game-board/GameBoard';
+import { BoardCell } from '../../components/cell/Cell';
+
+const cells: BoardCell[] = [
+  {
+    xPosition: 7,
+    yPosition: 1,
+  },
+];
 
 const Play: React.FC = () => {
   return (
     <div>
-      <h2>Play</h2>
+      <GameBoard cells={cells}></GameBoard>
     </div>
   );
 };
