@@ -4,3 +4,4 @@ export const BOARD_WIDTH = 300;
 export const BOARD_HEIGHT = 400;
 export const CELL_HEIGHT = BOARD_HEIGHT / CELL_ROW_COUNT;
 export const CELL_WIDTH = BOARD_WIDTH / CELL_COL_COUNT;
+export const GAME_ANIMATION_RATE = 1000;
