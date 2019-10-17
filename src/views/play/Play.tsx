@@ -5,93 +5,130 @@ import ControllerManager from '../../components/controller-manager/ControllerMan
 import { BoardCell } from '../../components/cell/Cell';
 
 import {
-  CELL_ROW_COUNT,
   CELL_COL_COUNT,
   GAME_ANIMATION_RATE,
 } from '../../constants/generalConstants';
 
-const cells: BoardCell[] = [];
+import TetrominoBuilder from '../../utils/tetrominoes/TetrominoBuilder';
+import BaseTetromino from '../../utils/tetrominoes/BaseTetromino';
+import {
+  moveDown,
+  moveLeft,
+  moveRight,
+  checkCollision,
+} from '../../utils/cellUtil';
 
 interface Props {}
 interface State {
   cells: BoardCell[];
-  lastTime: number;
-  animationFrame: number;
-  playableCell: BoardCell;
+  tetromino?: BaseTetromino;
   pressedKeys: String[];
 }
 
 class Play extends Component<Props, State> {
   state = {
-    playableCell: {
-      xPosition: 7,
-      yPosition: -1,
-    },
     lastTime: 0,
     animationFrame: 0,
     cells: [],
+    tetromino: undefined,
     pressedKeys: [],
   };
+
+  lastTime: number = 0;
+  animationFrame: number = -1;
 
   componentDidMount() {
     this.gameLoop(-1);
   }
 
   componentWillUnmount() {
-    window.cancelAnimationFrame(this.state.animationFrame);
+    window.cancelAnimationFrame(this.animationFrame);
   }
 
   gameLoop = (time: number) => {
-    this.setState(({ playableCell, lastTime, ...others }) => {
-      if (!lastTime || time - lastTime >= GAME_ANIMATION_RATE) {
+    if (!this.lastTime || time - this.lastTime >= GAME_ANIMATION_RATE) {
+      this.setState(
+        ({ tetromino, cells }) => {
+          const builder = new TetrominoBuilder({
+            xPosition: Math.floor(CELL_COL_COUNT / 2),
+            yPosition: 0,
+          });
+
+          let newTetromino = tetromino;
+
+          if (!newTetromino) {
+            newTetromino = builder.getTetromino();
+          }
+
+          if (checkCollision(newTetromino, cells)) {
+            cells = [...cells, ...newTetromino.getCells()];
+
+            const builder = new TetrominoBuilder({
+              xPosition: Math.floor(CELL_COL_COUNT / 2),
+              yPosition: 0,
+            });
+
+            newTetromino = builder.getTetromino();
+          } else {
+            newTetromino = moveDown(newTetromino);
+          }
+
+          return {
+            cells,
+            tetromino: newTetromino,
+            pressedKeys: [],
+          };
+        },
+        () => {
+          this.lastTime = time;
+          this.animationFrame = window.requestAnimationFrame(this.gameLoop);
+        },
+      );
+    } else {
+      this.animationFrame = window.requestAnimationFrame(this.gameLoop);
+    }
+  };
+
+  onKeysChanged = (keys: String[]) => {
+    // TODO: you also need to check collision here
+    this.setState(({ tetromino }) => {
+      if (tetromino) {
         return {
-          lastTime: time,
-          animationFrame: window.requestAnimationFrame(this.gameLoop),
-          playableCell:
-            playableCell.yPosition < CELL_ROW_COUNT - 1
-              ? {
-                  xPosition: playableCell.xPosition,
-                  yPosition: playableCell.yPosition + 1,
-                }
-              : { ...playableCell },
-          pressedKeys: [],
+          tetromino: this.computeNewPosition(tetromino, keys),
+          pressedKeys: keys,
         };
       }
 
       return {
-        ...others,
-        playableCell,
-        lastTime,
-        animationFrame: window.requestAnimationFrame(this.gameLoop),
+        pressedKeys: keys,
       };
     });
   };
 
-  onKeysChanged = (keys: String[]) => {
-    this.setState(({ playableCell }) => ({
-      playableCell: this.computeNewPosition(playableCell, keys),
-      pressedKeys: keys,
-    }));
-  };
+  computeNewPosition = (
+    tetromino: BaseTetromino,
+    pressedKeys: String[],
+  ): BaseTetromino => {
+    let newTetromino: BaseTetromino | null = tetromino;
+    if (tetromino) {
+      if (pressedKeys.includes('ArrowRight')) {
+        newTetromino = moveRight(tetromino);
+      }
 
-  computeNewPosition = (playableCell: BoardCell, pressedKeys: String[]) => {
-    const xPosition =
-      playableCell.xPosition +
-      (pressedKeys.includes('ArrowRight') ? 1 : 0) -
-      (pressedKeys.includes('ArrowLeft') ? 1 : 0);
+      if (pressedKeys.includes('ArrowLeft')) {
+        newTetromino = moveLeft(newTetromino);
+      }
 
-    return playableCell.yPosition < CELL_ROW_COUNT - 1
-      ? {
-          xPosition: Math.min(Math.max(0, xPosition), CELL_COL_COUNT - 1),
-          yPosition:
-            playableCell.yPosition +
-            (pressedKeys.includes('ArrowDown') ? 1 : 0),
-        }
-      : { ...playableCell };
+      if (pressedKeys.includes('ArrowDown')) {
+        newTetromino = moveDown(newTetromino);
+      }
+    }
+
+    return newTetromino;
   };
 
   render() {
-    const { playableCell, pressedKeys } = this.state;
+    const { cells, pressedKeys, tetromino } = this.state;
 
     return (
       <div>
@@ -99,7 +136,7 @@ class Play extends Component<Props, State> {
           pressedKeys={pressedKeys}
           onKeysChanged={this.onKeysChanged}
         ></ControllerManager>
-        <GameBoard cells={[playableCell, ...cells]}></GameBoard>
+        <GameBoard tetromino={tetromino} cells={[...cells]}></GameBoard>
       </div>
     );
   }
