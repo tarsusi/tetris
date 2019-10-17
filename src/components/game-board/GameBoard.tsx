@@ -7,8 +7,10 @@ import {
   CELL_COL_COUNT,
   CELL_ROW_COUNT,
 } from '../../constants/generalConstants';
+import BaseTetromino from '../../utils/tetrominoes/BaseTetromino';
 
 interface GameBoardProps {
+  tetromino?: BaseTetromino;
   cells?: BoardCell[];
 }
 
@@ -66,11 +68,14 @@ const renderCells = (cells?: BoardCell[]) => {
   );
 };
 
-const GameBoard: React.FC<GameBoardProps> = ({ cells }) => {
+const GameBoard: React.FC<GameBoardProps> = ({ cells, tetromino }) => {
   return (
     <svg id="game-board" height={BOARD_HEIGHT} width={BOARD_WIDTH}>
       <g id="separators">{generateSeparators()}</g>
-      <g id="objects">{renderCells(cells)}</g>
+      <g id="objects">
+        {tetromino && renderCells(tetromino.getCells())}
+        {renderCells(cells)}
+      </g>
     </svg>
   );
 };
