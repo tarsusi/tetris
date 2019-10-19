@@ -16,6 +16,7 @@ import {
   moveLeft,
   moveRight,
   checkCollision,
+  getNeighborCells,
 } from '../../utils/cellUtil';
 
 interface Props {}
@@ -60,7 +61,12 @@ class Play extends Component<Props, State> {
             newTetromino = builder.getTetromino();
           }
 
-          if (checkCollision(newTetromino, cells)) {
+          if (
+            checkCollision(
+              getNeighborCells(newTetromino.getCells(), 0, 1),
+              cells,
+            )
+          ) {
             cells = [...cells, ...newTetromino.getCells()];
 
             const builder = new TetrominoBuilder({
@@ -90,7 +96,6 @@ class Play extends Component<Props, State> {
   };
 
   onKeysChanged = (keys: String[]) => {
-    // TODO: you also need to check collision here
     this.setState(({ tetromino }) => {
       if (tetromino) {
         return {
@@ -110,20 +115,42 @@ class Play extends Component<Props, State> {
     pressedKeys: String[],
   ): BaseTetromino => {
     let newTetromino: BaseTetromino | null = tetromino;
-    if (tetromino) {
-      if (pressedKeys.includes('ArrowRight')) {
+
+    if (newTetromino) {
+      if (
+        pressedKeys.includes('ArrowRight') &&
+        !checkCollision(
+          getNeighborCells(newTetromino.getCells(), 1, 0),
+          this.state.cells,
+        )
+      ) {
         newTetromino = moveRight(tetromino);
       }
 
-      if (pressedKeys.includes('ArrowLeft')) {
+      if (
+        pressedKeys.includes('ArrowLeft') &&
+        !checkCollision(
+          getNeighborCells(newTetromino.getCells(), -1, 0),
+          this.state.cells,
+        )
+      ) {
         newTetromino = moveLeft(newTetromino);
       }
 
-      if (pressedKeys.includes('ArrowDown')) {
+      if (
+        pressedKeys.includes('ArrowDown') &&
+        !checkCollision(
+          getNeighborCells(newTetromino.getCells(), 0, 1),
+          this.state.cells,
+        )
+      ) {
         newTetromino = moveDown(newTetromino);
       }
 
-      if (pressedKeys.includes('ArrowUp')) {
+      if (
+        pressedKeys.includes('ArrowUp') &&
+        !checkCollision(newTetromino.getNextStateCells(), this.state.cells)
+      ) {
         newTetromino = tetromino.nextState();
       }
     }

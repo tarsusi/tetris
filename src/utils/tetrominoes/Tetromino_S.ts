@@ -7,14 +7,14 @@ export default class Tetromino_S extends Tetromino {
     [
       centerCell,
       getNeighborCell(centerCell, 1, 0),
-      getNeighborCell(centerCell, 1, 1),
-      getNeighborCell(centerCell, 2, 1),
+      getNeighborCell(centerCell, 0, 1),
+      getNeighborCell(centerCell, -1, 1),
     ],
     [
       centerCell,
+      getNeighborCell(centerCell, 0, -1),
       getNeighborCell(centerCell, 1, 0),
-      getNeighborCell(centerCell, 1, -1),
-      getNeighborCell(centerCell, 0, 1),
+      getNeighborCell(centerCell, 1, 1),
     ],
   ];
 

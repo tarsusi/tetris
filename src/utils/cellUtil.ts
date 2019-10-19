@@ -14,6 +14,20 @@ export const getNeighborCell = (
   };
 };
 
+export const getNeighborCells = (
+  cells: BoardCell[],
+  xMovement: number,
+  yMovement: number,
+): BoardCell[] => {
+  return cells.map(
+    ({ xPosition, yPosition, ...others }): BoardCell => ({
+      ...others,
+      xPosition: xPosition + xMovement,
+      yPosition: yPosition + yMovement,
+    }),
+  );
+};
+
 export const moveLeft = (tetromino: BaseTetromino): BaseTetromino => {
   const cells = tetromino.getCells();
 
@@ -45,14 +59,9 @@ export const moveDown = (tetromino: BaseTetromino): BaseTetromino => {
 };
 
 export const checkCollision = (
-  tetromino: BaseTetromino,
+  upcomingCells: BoardCell[],
   cells: BoardCell[],
 ): boolean => {
-  const upcomingCells: BoardCell[] = tetromino.getCells().map((cell) => ({
-    xPosition: cell.xPosition,
-    yPosition: cell.yPosition + 1,
-  }));
-
   const anyCollision: boolean = upcomingCells.some((upcomingCell) =>
     cellsIncludes(cells, upcomingCell),
   );
@@ -61,7 +70,17 @@ export const checkCollision = (
     (upcomingCell) => upcomingCell.yPosition === CELL_ROW_COUNT,
   );
 
-  return anyCollision || isAtBottomEdge;
+  const isExceedRightSide: boolean = upcomingCells.some(
+    (upcomingCell) => upcomingCell.xPosition >= CELL_COL_COUNT,
+  );
+
+  const isExceedLeftSide: boolean = upcomingCells.some(
+    (upcomingCell) => upcomingCell.xPosition < 0,
+  );
+
+  return (
+    anyCollision || isAtBottomEdge || isExceedRightSide || isExceedLeftSide
+  );
 };
 
 export const cellsIncludes = (

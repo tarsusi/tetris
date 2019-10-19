@@ -12,7 +12,7 @@ export default abstract class BaseTetromino {
     this.centerCell = centerCell;
   }
 
-  public getCells() {
+  public getCells(): BoardCell[] {
     return this.cells.map((cell) => ({ ...cell }));
   }
 
