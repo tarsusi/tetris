@@ -2,31 +2,15 @@ import { BoardCell } from '../components/cell/Cell';
 import BaseTetromino from './tetrominoes/BaseTetromino';
 import { CELL_COL_COUNT, CELL_ROW_COUNT } from '../constants/generalConstants';
 
-export const getLeftCell = (cell: BoardCell): BoardCell => {
+export const getNeighborCell = (
+  { xPosition, yPosition, ...others }: BoardCell,
+  xMovement: number,
+  yMovement: number,
+): BoardCell => {
   return {
-    xPosition: cell.xPosition - 1,
-    yPosition: cell.yPosition,
-  };
-};
-
-export const getRightCell = (cell: BoardCell): BoardCell => {
-  return {
-    xPosition: cell.xPosition + 1,
-    yPosition: cell.yPosition,
-  };
-};
-
-export const getUpperCell = (cell: BoardCell): BoardCell => {
-  return {
-    xPosition: cell.xPosition,
-    yPosition: cell.yPosition - 1,
-  };
-};
-
-export const getLowerCell = (cell: BoardCell): BoardCell => {
-  return {
-    xPosition: cell.xPosition,
-    yPosition: cell.yPosition + 1,
+    ...others,
+    xPosition: xPosition + xMovement,
+    yPosition: yPosition + yMovement,
   };
 };
 
@@ -34,7 +18,7 @@ export const moveLeft = (tetromino: BaseTetromino): BaseTetromino => {
   const cells = tetromino.getCells();
 
   if (cells.every((cell) => cell.xPosition !== 0)) {
-    tetromino.moveLeft();
+    tetromino.moveTetromino(-1, 0);
   }
 
   return tetromino;
@@ -44,7 +28,7 @@ export const moveRight = (tetromino: BaseTetromino): BaseTetromino => {
   const cells = tetromino.getCells();
 
   if (cells.every((cell) => cell.xPosition < CELL_COL_COUNT - 1)) {
-    tetromino.moveRight();
+    tetromino.moveTetromino(1, 0);
   }
 
   return tetromino;
@@ -54,7 +38,7 @@ export const moveDown = (tetromino: BaseTetromino): BaseTetromino => {
   const cells = tetromino.getCells();
 
   if (cells.every((cell) => cell.yPosition < CELL_ROW_COUNT - 1)) {
-    tetromino.moveDown();
+    tetromino.moveTetromino(0, 1);
   }
 
   return tetromino;

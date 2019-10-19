@@ -1,6 +1,6 @@
 import Tetromino from './BaseTetromino';
 import { BoardCell } from '../../components/cell/Cell';
-import { getRightCell, getLowerCell } from '../cellUtil';
+import { getNeighborCell } from '../cellUtil';
 
 export default class Tetromino_L extends Tetromino {
   constructor(centerCell: BoardCell) {
@@ -8,9 +8,9 @@ export default class Tetromino_L extends Tetromino {
 
     this.cells = [
       centerCell,
-      getLowerCell(centerCell),
-      getLowerCell(getLowerCell(centerCell)),
-      getRightCell(getLowerCell(getLowerCell(centerCell))),
+      getNeighborCell(centerCell, 0, 1),
+      getNeighborCell(centerCell, 0, 2),
+      getNeighborCell(centerCell, 1, 2),
     ];
   }
 }
