@@ -11,3 +11,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'Retro Gaming';
+  src: local('RetroGaming'), url('./assets/fonts/RetroGaming.ttf') format('truetype');
+}
+
+* {
+  font-family: 'Retro Gaming';
+}
+
+html,
+body,
+#root {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+}
+
+.view-container {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+}

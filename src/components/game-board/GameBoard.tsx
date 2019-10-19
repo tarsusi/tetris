@@ -10,8 +10,9 @@ import {
 import BaseTetromino from '../../utils/tetrominoes/BaseTetromino';
 
 interface GameBoardProps {
-  tetromino?: BaseTetromino;
   cells?: BoardCell[];
+  showGrid?: boolean;
+  tetromino?: BaseTetromino;
 }
 
 const generateSeparators = () => {
@@ -68,10 +69,14 @@ const renderCells = (cells?: BoardCell[]) => {
   );
 };
 
-const GameBoard: React.FC<GameBoardProps> = ({ cells, tetromino }) => {
+const GameBoard: React.FC<GameBoardProps> = ({
+  cells,
+  showGrid,
+  tetromino,
+}) => {
   return (
     <svg id="game-board" height={BOARD_HEIGHT} width={BOARD_WIDTH}>
-      <g id="separators">{generateSeparators()}</g>
+      {showGrid && <g id="separators">{generateSeparators()}</g>}
       <g id="objects">
         {tetromino && renderCells(tetromino.getCells())}
         {renderCells(cells)}

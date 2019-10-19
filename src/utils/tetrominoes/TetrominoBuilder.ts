@@ -9,11 +9,19 @@ import Tetromino_J from './Tetromino_J';
 
 import { BoardCell } from '../../components/cell/Cell';
 
+import { TETROMINO_COLOR_PALLETTE } from '../../constants/generalConstants';
+
 export default class TetrominoBuilder {
   private tetromino: BaseTetromino;
 
   constructor(centerCell: BoardCell) {
-    this.tetromino = this.buildNextTetromino(centerCell);
+    this.tetromino = this.buildNextTetromino({
+      ...centerCell,
+      color:
+        TETROMINO_COLOR_PALLETTE[
+          Math.round(Math.random() * (TETROMINO_COLOR_PALLETTE.length - 1))
+        ],
+    });
   }
 
   private buildNextTetromino(centerCell: BoardCell): BaseTetromino {
@@ -27,6 +35,7 @@ export default class TetrominoBuilder {
       new Tetromino_J(centerCell),
     ];
 
+    // TODO: create with also randomized state
     return tetrominoes[Math.round(Math.random() * (tetrominoes.length - 1))];
   }
 

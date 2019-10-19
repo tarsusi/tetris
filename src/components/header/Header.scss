@@ -1,7 +1,7 @@
 @import '../../styles/main.scss';
 
 .app-header {
-    background-color: #282c34;
+    background-color: $secondary-color;
     min-height: 50px;
 
     display: flex;
@@ -11,5 +11,11 @@
 
     &-link {
         color: $primary-color;
+
+        transition: all 0.3s ease;
+
+        &:hover {
+            color: $vibrant-color;
+        }
     }
 }

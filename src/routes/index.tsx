@@ -10,9 +10,11 @@ const Routes: React.FC = () => {
   return (
     <Router>
       <Header />
-      <Route exact path="/" component={Home} />
-      <Route path="/play" component={Play} />
-      <Route path="/settings" component={Settings} />
+      <div className="view-container">
+        <Route exact path="/" component={Home} />
+        <Route path="/play" component={Play} />
+        <Route path="/settings" component={Settings} />
+      </div>
     </Router>
   );
 };

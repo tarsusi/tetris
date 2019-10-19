@@ -1,9 +1,12 @@
+@import '../../styles/main.scss';
+
 #game-board {
     margin: 45px;
 
-    background-color: grey;
+    background-color: $secondary-color;
 
-    .separator {
+    .separator,
+    .game-cell {
         stroke: azure;
     }
 }
