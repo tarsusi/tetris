@@ -2,8 +2,11 @@ import BaseTetromino from './BaseTetromino';
 import Tetromino_T from './Tetromino_T';
 import Tetromino_D from './Tetromino_D';
 import Tetromino_S from './Tetromino_S';
+import Tetromino_Z from './Tetromino_Z';
 import Tetromino_I from './Tetromino_I';
 import Tetromino_L from './Tetromino_L';
+import Tetromino_J from './Tetromino_J';
+
 import { BoardCell } from '../../components/cell/Cell';
 
 export default class TetrominoBuilder {
@@ -18,8 +21,10 @@ export default class TetrominoBuilder {
       new Tetromino_T(centerCell),
       new Tetromino_D(centerCell),
       new Tetromino_S(centerCell),
+      new Tetromino_Z(centerCell),
       new Tetromino_I(centerCell),
       new Tetromino_L(centerCell),
+      new Tetromino_J(centerCell),
     ];
 
     return tetrominoes[Math.round(Math.random() * (tetrominoes.length - 1))];
