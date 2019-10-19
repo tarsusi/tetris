@@ -3,16 +3,26 @@ import { BoardCell } from '../../components/cell/Cell';
 import { getNeighborCell } from '../cellUtil';
 
 export default class Tetromino_I extends Tetromino {
-  private states?: [BoardCell, BoardCell, BoardCell, BoardCell][];
-
-  constructor(centerCell: BoardCell) {
-    super();
-
-    this.cells = [
+  cellStates = (centerCell: BoardCell) => [
+    [
       centerCell,
       getNeighborCell(centerCell, 0, 1),
       getNeighborCell(centerCell, 0, 2),
       getNeighborCell(centerCell, 0, 3),
-    ];
+    ],
+    [
+      getNeighborCell(centerCell, -1, 0),
+      centerCell,
+      getNeighborCell(centerCell, 1, 0),
+      getNeighborCell(centerCell, 2, 0),
+    ],
+  ];
+
+  stateCount = 2;
+
+  constructor(centerCell: BoardCell) {
+    super(centerCell);
+
+    this.cells = this.cellStates(this.centerCell)[this.currentState];
   }
 }

@@ -122,6 +122,10 @@ class Play extends Component<Props, State> {
       if (pressedKeys.includes('ArrowDown')) {
         newTetromino = moveDown(newTetromino);
       }
+
+      if (pressedKeys.includes('ArrowUp')) {
+        newTetromino = tetromino.nextState();
+      }
     }
 
     return newTetromino;
