@@ -17,7 +17,10 @@ import {
   moveRight,
   checkCollision,
   getNeighborCells,
+  clearFullRows,
 } from '../../utils/cellUtil';
+
+import './play.scss';
 
 interface Props {}
 interface State {
@@ -80,7 +83,7 @@ class Play extends Component<Props, State> {
           }
 
           return {
-            cells,
+            cells: clearFullRows(cells),
             tetromino: newTetromino,
             pressedKeys: [],
           };
@@ -162,7 +165,7 @@ class Play extends Component<Props, State> {
     const { cells, pressedKeys, tetromino } = this.state;
 
     return (
-      <div>
+      <div className="play-container">
         <ControllerManager
           pressedKeys={pressedKeys}
           onKeysChanged={this.onKeysChanged}

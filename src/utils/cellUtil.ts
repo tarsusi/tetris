@@ -93,3 +93,26 @@ export const cellsIncludes = (
       cell.yPosition === otherCell.yPosition,
   );
 };
+
+export const clearFullRows = (cells: BoardCell[]): BoardCell[] => {
+  const colCounts = Array(CELL_ROW_COUNT).fill(0);
+
+  for (let cell of cells) {
+    colCounts[cell.yPosition]++;
+  }
+
+  for (let row = 0; row < CELL_ROW_COUNT; row++) {
+    if (colCounts[row] === CELL_COL_COUNT) {
+      cells = cells
+        .filter((cell) => cell.yPosition !== row)
+        .map(
+          ({ yPosition, ...others }): BoardCell => ({
+            ...others,
+            yPosition: yPosition < row ? yPosition + 1 : yPosition,
+          }),
+        );
+    }
+  }
+
+  return cells;
+};
