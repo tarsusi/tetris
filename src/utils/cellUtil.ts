@@ -1,6 +1,16 @@
 import { BoardCell } from '../components/cell/Cell';
 import BaseTetromino from './tetrominoes/BaseTetromino';
 import { CELL_COL_COUNT, CELL_ROW_COUNT } from '../constants/generalConstants';
+import TetrominoBuilder from './tetrominoes/TetrominoBuilder';
+
+export const generateTetromino = (): BaseTetromino => {
+  const builder = new TetrominoBuilder({
+    xPosition: Math.floor(CELL_COL_COUNT / 2),
+    yPosition: 0,
+  });
+
+  return builder.getTetromino();
+};
 
 export const getNeighborCell = (
   { xPosition, yPosition, ...others }: BoardCell,

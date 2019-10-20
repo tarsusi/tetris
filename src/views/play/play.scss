@@ -1,3 +1,5 @@
+@import '../../styles/main.scss';
+
 .play-container {
     flex: 1;
 
@@ -5,4 +7,77 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    .game-over-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .game-over-title {
+            font-size: 24px;
+
+            margin-bottom: 24px;
+        }
+
+        .game-over-restart {
+            font-size: 18px;
+
+            cursor: pointer;
+
+            color: $vibrant-light-color;
+
+            transition: all 0.3s ease;
+
+            &:hover {
+                font-size: 24px;
+            }
+        }
+    }
+
+    .start-stop-button-container {
+        display: flex;
+        align-items: center;
+
+        .start-stop-button-title {
+            width: 120px;
+            margin-right: 12px;
+        }
+
+        .start-stop-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 50px;
+            height: 50px;
+
+            background-color: $vibrant-light-color;
+            border-radius: 50%;
+
+            cursor: pointer;
+
+            .inner {
+                width: 0;
+                height: 0;
+
+                transition: all 0.3s ease;
+
+                &.pause {
+                    border-style: solid;
+                    border-width: 10px 0 10px 20px;
+                    margin-left: 5px;
+                    border-color: transparent transparent transparent $primary-color;
+                }
+
+                &.start {
+                    width: 20px;
+                    height: 20px;
+
+                    border-radius: 50%;
+
+                    background-color: $primary-color;
+                }
+            }
+        }
+    }
 }
