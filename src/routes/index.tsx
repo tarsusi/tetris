@@ -8,7 +8,7 @@ import Settings from '../views/settings/Settings';
 
 const Routes: React.FC = () => {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <Header />
       <div className="view-container">
         <Route exact path="/" component={Home} />
