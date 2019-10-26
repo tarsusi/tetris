@@ -1,0 +1,113 @@
+@import '../../styles/main.scss';
+
+.manager-container {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+
+    opacity: 0.4;
+
+    perspective: 400px;
+
+    &:not(.touchable) {
+        display: none;
+    }
+
+    .joystick-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        width: 160px;
+        height: 160px;
+
+        background-color: $vibrant-color;
+
+        border: 5px solid $secondary-color;
+
+        box-shadow: 0px 6px $primary-color, inset 0px 6px $primary-color;
+        border-radius: 50%;
+
+        transition: transform 0.3s ease;
+
+        &.up {
+            transform: rotateX(30deg);
+        }
+
+        &.down {
+            transform: rotateX(-30deg);
+        }
+
+        &.left {
+            transform: rotateY(-30deg);
+        }
+
+        &.right {
+            transform: rotateY(30deg);
+        }
+
+        .arrow-left,
+        .arrow-right,
+        .arrow-middle,
+        .arrow-up,
+        .arrow-down {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: 26px;
+            height: 26px;
+
+            background-color: $vibrant-light-color;
+            color: $primary-color;
+            box-sizing: border-box;
+
+        }
+
+        .arrow-left {
+            border: 2px solid $secondary-color;
+            border-right-width: 0;
+            margin-right: 0px;
+        }
+
+        .arrow-right {
+            border: 2px solid $secondary-color;
+            border-left-width: 0;
+            margin-left: -4px;
+        }
+
+        .arrow-up {
+            border: 2px solid $secondary-color;
+            border-bottom-width: 0;
+            margin-bottom: -2px;
+        }
+
+        .arrow-down {
+            border: 2px solid $secondary-color;
+            border-top-width: 0;
+            margin-top: -2px;
+        }
+
+        .arrow-middle {
+            width: 26px;
+            height: 26px;
+
+            .middle-circle {
+                width: 18px;
+                height: 18px;
+
+                margin-left: -4px;
+
+                border: 2px solid $secondary-color;
+                border-radius: 50%;
+            }
+        }
+
+        .middle-arrows {
+            display: flex;
+            align-items: center;
+
+        }
+    }
+}

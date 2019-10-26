@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import GameBoard from '../../components/game-board/GameBoard';
-import ControllerManager from '../../components/controller-manager/ControllerManager';
+import KeyboardManager from '../../components/keyboard-manager/KeyboardManager';
 import { BoardCell } from '../../components/cell/Cell';
 
 import { GAME_ANIMATION_RATE } from '../../constants/generalConstants';
@@ -231,10 +231,10 @@ class Play extends Component<Props, State> {
                 ></div>
               </div>
             </div>
-            <ControllerManager
+            <KeyboardManager
               pressedKeys={pressedKeys}
               onKeysChanged={this.onKeysChanged}
-            ></ControllerManager>
+            ></KeyboardManager>
             <GameBoard tetromino={tetromino} cells={[...cells]}></GameBoard>
           </>
         )}
