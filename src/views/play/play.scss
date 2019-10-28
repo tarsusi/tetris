@@ -5,8 +5,9 @@
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+
+    padding: 24px;
 
     .game-over-container {
         display: flex;
@@ -37,6 +38,8 @@
     .start-stop-button-container {
         display: flex;
         align-items: center;
+
+        margin-bottom: 12px;
 
         .start-stop-button-title {
             width: 120px;

@@ -1,5 +1,5 @@
-import React from 'react';
-import './game-board.scss';
+import React, { useState, useLayoutEffect, useRef } from 'react';
+
 import { Cell, BoardCell } from '../cell/Cell';
 import {
   BOARD_HEIGHT,
@@ -8,6 +8,8 @@ import {
   CELL_ROW_COUNT,
 } from '../../constants/generalConstants';
 import BaseTetromino from '../../utils/tetrominoes/BaseTetromino';
+
+import './game-board.scss';
 
 interface GameBoardProps {
   cells?: BoardCell[];
@@ -74,8 +76,45 @@ const GameBoard: React.FC<GameBoardProps> = ({
   showGrid,
   tetromino,
 }) => {
+  let svgRef: any = useRef(null);
+  const [[width, height], setSize] = useState([0, 0]);
+
+  useLayoutEffect(() => {
+    const updateSize = () => {
+      const aspectRatio = 4 / 3;
+      const pageMargin = 24;
+      const wH = window.innerHeight;
+      const gameBoardHeight = wH - 160;
+
+      let newWidth = gameBoardHeight / aspectRatio;
+      let newHeight = gameBoardHeight;
+      if (newWidth > window.innerWidth - pageMargin * 2) {
+        newWidth = window.innerWidth - pageMargin * 2;
+        newHeight = newWidth * aspectRatio;
+      }
+
+      if (svgRef && svgRef.current) {
+        setSize([newWidth, newHeight]);
+      } else {
+        setSize([0, 0]);
+      }
+    };
+
+    window.addEventListener('resize', updateSize);
+
+    updateSize();
+
+    return () => window.removeEventListener('resize', updateSize);
+  }, [svgRef]);
+
   return (
-    <svg id="game-board" height={BOARD_HEIGHT} width={BOARD_WIDTH}>
+    <svg
+      ref={svgRef}
+      width={width}
+      height={height}
+      viewBox={`0 0 ${BOARD_WIDTH} ${BOARD_HEIGHT}`}
+      id="game-board"
+    >
       {showGrid && <g id="separators">{generateSeparators()}</g>}
       <g id="objects">
         {tetromino && renderCells(tetromino.getCells())}
