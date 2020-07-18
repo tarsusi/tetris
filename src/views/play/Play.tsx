@@ -13,14 +13,16 @@ import {
   getNeighborCells,
   clearFullRows,
   generateTetromino,
+  toGameSpeed,
 } from '../../utils/cellUtil';
 
 import './play.scss';
+import { SpeedSetting } from '../../hooks/useGameSettings';
 
 interface Props {
   cellColCount: number;
   cellRowCount: number;
-  speed: number;
+  speed: SpeedSetting;
 }
 
 interface State {
@@ -53,8 +55,8 @@ class Play extends Component<Props, State> {
     window.cancelAnimationFrame(this.animationFrame);
   }
 
-  gameLoop = (time: number, speed: number) => {
-    if (!this.lastTime || time - this.lastTime >= speed) {
+  gameLoop = (time: number, speed: SpeedSetting) => {
+    if (!this.lastTime || time - this.lastTime >= toGameSpeed(speed)) {
       this.setState(
         ({ tetromino, cells, isGameStart }) => {
           if (!isGameStart) {
@@ -64,7 +66,7 @@ class Play extends Component<Props, State> {
             let gameOver = false;
 
             if (!newTetromino) {
-              newTetromino = generateTetromino(speed);
+              newTetromino = generateTetromino(this.props.cellColCount);
             }
 
             if (
@@ -116,7 +118,7 @@ class Play extends Component<Props, State> {
     }
   };
 
-  onKeysChanged = (keys: String[], speed: number) => {
+  onKeysChanged = (keys: String[], speed: SpeedSetting) => {
     this.setState(
       ({ tetromino }) => {
         if (tetromino) {
@@ -197,7 +199,7 @@ class Play extends Component<Props, State> {
     return newTetromino;
   };
 
-  toggleGameStart = (speed: number) => {
+  toggleGameStart = (speed: SpeedSetting) => {
     this.setState(
       ({ isGameStart }) => ({ isGameStart: !isGameStart }),
       () => {
@@ -208,7 +210,7 @@ class Play extends Component<Props, State> {
     );
   };
 
-  restartGame = (speed: number) => {
+  restartGame = (speed: SpeedSetting) => {
     this.setState(
       {
         cells: [],
