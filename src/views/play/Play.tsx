@@ -4,8 +4,6 @@ import GameBoard from '../../components/game-board/GameBoard';
 import KeyboardManager from '../../components/keyboard-manager/KeyboardManager';
 import { BoardCell } from '../../components/cell/Cell';
 
-import { GAME_ANIMATION_RATE } from '../../constants/generalConstants';
-
 import BaseTetromino from '../../utils/tetrominoes/BaseTetromino';
 import {
   moveDown,
@@ -19,7 +17,12 @@ import {
 
 import './play.scss';
 
-interface Props {}
+interface Props {
+  cellColCount: number;
+  cellRowCount: number;
+  speed: number;
+}
+
 interface State {
   cells: BoardCell[];
   isGameOver: boolean;
@@ -42,7 +45,7 @@ class Play extends Component<Props, State> {
 
   componentDidMount() {
     if (this.state.isGameStart) {
-      this.gameLoop(-1);
+      this.gameLoop(-1, this.props.speed);
     }
   }
 
@@ -50,8 +53,8 @@ class Play extends Component<Props, State> {
     window.cancelAnimationFrame(this.animationFrame);
   }
 
-  gameLoop = (time: number) => {
-    if (!this.lastTime || time - this.lastTime >= GAME_ANIMATION_RATE) {
+  gameLoop = (time: number, speed: number) => {
+    if (!this.lastTime || time - this.lastTime >= speed) {
       this.setState(
         ({ tetromino, cells, isGameStart }) => {
           if (!isGameStart) {
@@ -61,34 +64,38 @@ class Play extends Component<Props, State> {
             let gameOver = false;
 
             if (!newTetromino) {
-              newTetromino = generateTetromino();
+              newTetromino = generateTetromino(speed);
             }
 
             if (
               checkCollision(
                 getNeighborCells(newTetromino.getCells(), 0, 1),
                 cells,
+                this.props.cellRowCount,
+                this.props.cellColCount,
               )
             ) {
               cells = [...cells, ...newTetromino.getCells()];
 
-              newTetromino = generateTetromino();
+              newTetromino = generateTetromino(this.props.cellColCount);
 
               if (
                 checkCollision(
                   getNeighborCells(newTetromino.getCells(), 0, 0),
                   cells,
+                  this.props.cellRowCount,
+                  this.props.cellColCount,
                 )
               ) {
                 newTetromino = undefined;
                 gameOver = true;
               }
             } else {
-              newTetromino = moveDown(newTetromino);
+              newTetromino = moveDown(newTetromino, this.props.cellRowCount);
             }
 
             return {
-              cells: clearFullRows(cells),
+              cells: clearFullRows(cells, this.props.cellRowCount),
               isGameOver: gameOver,
               tetromino: newTetromino,
               pressedKeys: [],
@@ -97,15 +104,19 @@ class Play extends Component<Props, State> {
         },
         () => {
           this.lastTime = time;
-          this.animationFrame = window.requestAnimationFrame(this.gameLoop);
+          this.animationFrame = window.requestAnimationFrame((time) =>
+            this.gameLoop(time, this.props.speed),
+          );
         },
       );
     } else {
-      this.animationFrame = window.requestAnimationFrame(this.gameLoop);
+      this.animationFrame = window.requestAnimationFrame((time) =>
+        this.gameLoop(time, this.props.speed),
+      );
     }
   };
 
-  onKeysChanged = (keys: String[]) => {
+  onKeysChanged = (keys: String[], speed: number) => {
     this.setState(
       ({ tetromino }) => {
         if (tetromino) {
@@ -121,7 +132,7 @@ class Play extends Component<Props, State> {
       },
       () => {
         if (keys.includes('p') || keys.includes('p')) {
-          this.toggleGameStart();
+          this.toggleGameStart(speed);
         }
       },
     );
@@ -139,9 +150,11 @@ class Play extends Component<Props, State> {
         !checkCollision(
           getNeighborCells(newTetromino.getCells(), 1, 0),
           this.state.cells,
+          this.props.cellRowCount,
+          this.props.cellColCount,
         )
       ) {
-        newTetromino = moveRight(tetromino);
+        newTetromino = moveRight(tetromino, this.props.cellColCount);
       }
 
       if (
@@ -149,6 +162,8 @@ class Play extends Component<Props, State> {
         !checkCollision(
           getNeighborCells(newTetromino.getCells(), -1, 0),
           this.state.cells,
+          this.props.cellRowCount,
+          this.props.cellColCount,
         )
       ) {
         newTetromino = moveLeft(newTetromino);
@@ -159,14 +174,21 @@ class Play extends Component<Props, State> {
         !checkCollision(
           getNeighborCells(newTetromino.getCells(), 0, 1),
           this.state.cells,
+          this.props.cellRowCount,
+          this.props.cellColCount,
         )
       ) {
-        newTetromino = moveDown(newTetromino);
+        newTetromino = moveDown(newTetromino, this.props.cellRowCount);
       }
 
       if (
         pressedKeys.includes('ArrowUp') &&
-        !checkCollision(newTetromino.getNextStateCells(), this.state.cells)
+        !checkCollision(
+          newTetromino.getNextStateCells(),
+          this.state.cells,
+          this.props.cellRowCount,
+          this.props.cellColCount,
+        )
       ) {
         newTetromino = tetromino.nextState();
       }
@@ -175,18 +197,18 @@ class Play extends Component<Props, State> {
     return newTetromino;
   };
 
-  toggleGameStart = () => {
+  toggleGameStart = (speed: number) => {
     this.setState(
       ({ isGameStart }) => ({ isGameStart: !isGameStart }),
       () => {
         if (this.state.isGameStart) {
-          this.gameLoop(-1);
+          this.gameLoop(-1, speed);
         }
       },
     );
   };
 
-  restartGame = () => {
+  restartGame = (speed: number) => {
     this.setState(
       {
         cells: [],
@@ -196,7 +218,7 @@ class Play extends Component<Props, State> {
         tetromino: undefined,
       },
       () => {
-        this.gameLoop(-1);
+        this.gameLoop(-1, speed);
       },
     );
   };
@@ -215,7 +237,10 @@ class Play extends Component<Props, State> {
         {(isGameOver && (
           <div className="game-over-container">
             <div className="game-over-title">Game Over</div>
-            <div className="game-over-restart" onClick={this.restartGame}>
+            <div
+              className="game-over-restart"
+              onClick={() => this.restartGame(this.props.speed)}
+            >
               Restart
             </div>
           </div>
@@ -225,7 +250,10 @@ class Play extends Component<Props, State> {
               <div className="start-stop-button-title">
                 {!isGameStart ? 'Game Start' : 'Game Pause'}
               </div>
-              <div className="start-stop-button" onClick={this.toggleGameStart}>
+              <div
+                className="start-stop-button"
+                onClick={() => this.toggleGameStart(this.props.speed)}
+              >
                 <div
                   className={'inner ' + (isGameStart ? 'start' : 'pause')}
                 ></div>
@@ -233,7 +261,7 @@ class Play extends Component<Props, State> {
             </div>
             <KeyboardManager
               pressedKeys={pressedKeys}
-              onKeysChanged={this.onKeysChanged}
+              onKeysChanged={(key) => this.onKeysChanged(key, this.props.speed)}
             ></KeyboardManager>
             <GameBoard tetromino={tetromino} cells={[...cells]}></GameBoard>
           </>

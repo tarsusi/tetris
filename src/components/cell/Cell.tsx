@@ -1,10 +1,6 @@
 import React from 'react';
-import {
-  CELL_WIDTH,
-  CELL_HEIGHT,
-  CELL_RADIUS,
-} from '../../constants/generalConstants';
 import './cell.scss';
+import { useGameSettings } from '../../hooks/useGameSettings';
 
 export interface BoardCell {
   xPosition: number;
@@ -20,15 +16,18 @@ export const Cell: React.FC<CellProps> = ({
   yPosition,
   color = 'red',
 }) => {
+  const {
+    gameSettings: { cellWidth, cellHeight, cellRadius },
+  } = useGameSettings();
   return (
     <rect
       className="game-cell"
-      width={CELL_WIDTH}
-      height={CELL_HEIGHT}
-      x={xPosition * CELL_WIDTH}
-      y={yPosition * CELL_HEIGHT}
-      rx={CELL_RADIUS}
-      ry={CELL_RADIUS}
+      width={cellWidth}
+      height={cellHeight}
+      x={xPosition * cellWidth}
+      y={yPosition * cellHeight}
+      rx={cellRadius}
+      ry={cellRadius}
       fill={color}
     ></rect>
   );

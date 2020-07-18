@@ -1,15 +1,10 @@
 import React, { useState, useLayoutEffect, useRef } from 'react';
 
 import { Cell, BoardCell } from '../cell/Cell';
-import {
-  BOARD_HEIGHT,
-  BOARD_WIDTH,
-  CELL_COL_COUNT,
-  CELL_ROW_COUNT,
-} from '../../constants/generalConstants';
 import BaseTetromino from '../../utils/tetrominoes/BaseTetromino';
 
 import './game-board.scss';
+import { useGameSettings } from '../../hooks/useGameSettings';
 
 interface GameBoardProps {
   cells?: BoardCell[];
@@ -17,14 +12,15 @@ interface GameBoardProps {
   tetromino?: BaseTetromino;
 }
 
-const generateSeparators = () => {
+const generateSeparators = (
+  boardWidth: number,
+  boardHeight: number,
+  cellColCount: number,
+  cellRowCount: number,
+) => {
   const separators = [];
 
-  for (
-    let index = 0;
-    index < BOARD_WIDTH;
-    index += BOARD_WIDTH / CELL_COL_COUNT
-  ) {
+  for (let index = 0; index < boardWidth; index += boardWidth / cellColCount) {
     separators.push(
       <line
         key={`vertical-separator-${index}`}
@@ -32,15 +28,15 @@ const generateSeparators = () => {
         x1={index}
         y1={0}
         x2={index}
-        y2={BOARD_HEIGHT}
+        y2={boardHeight}
       ></line>,
     );
   }
 
   for (
     let index = 0;
-    index < BOARD_HEIGHT;
-    index += BOARD_HEIGHT / CELL_ROW_COUNT
+    index < boardHeight;
+    index += boardHeight / cellRowCount
   ) {
     separators.push(
       <line
@@ -48,7 +44,7 @@ const generateSeparators = () => {
         className="separator"
         x1={0}
         y1={index}
-        x2={BOARD_WIDTH}
+        x2={boardWidth}
         y2={index}
       ></line>,
     );
@@ -78,7 +74,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
 }) => {
   let svgRef: any = useRef(null);
   const [[width, height], setSize] = useState([0, 0]);
-
+  const { gameSettings } = useGameSettings();
   useLayoutEffect(() => {
     const updateSize = () => {
       const aspectRatio = 4 / 3;
@@ -112,10 +108,19 @@ const GameBoard: React.FC<GameBoardProps> = ({
       ref={svgRef}
       width={width}
       height={height}
-      viewBox={`0 0 ${BOARD_WIDTH} ${BOARD_HEIGHT}`}
+      viewBox={`0 0 ${gameSettings.boardWidth} ${gameSettings.boardHeight}`}
       id="game-board"
     >
-      {showGrid && <g id="separators">{generateSeparators()}</g>}
+      {showGrid && (
+        <g id="separators">
+          {generateSeparators(
+            gameSettings.boardWidth,
+            gameSettings.boardHeight,
+            gameSettings.cellColCount,
+            gameSettings.cellRowCount,
+          )}
+        </g>
+      )}
       <g id="objects">
         {tetromino && renderCells(tetromino.getCells())}
         {renderCells(cells)}

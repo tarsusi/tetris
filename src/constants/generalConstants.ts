@@ -1,12 +1,3 @@
-export const CELL_ROW_COUNT = 16;
-export const CELL_COL_COUNT = 12;
-export const CELL_RADIUS = 4;
-export const BOARD_WIDTH = 1200;
-export const BOARD_HEIGHT = 1600;
-export const CELL_HEIGHT = BOARD_HEIGHT / CELL_ROW_COUNT;
-export const CELL_WIDTH = BOARD_WIDTH / CELL_COL_COUNT;
-export const GAME_ANIMATION_RATE = 1000;
-
 // these color codes are taken from https://jariz.github.io/vibrant.js/
 export const TETROMINO_COLOR_PALLETTE = [
   'rgb(227, 76, 74)',

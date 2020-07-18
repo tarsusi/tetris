@@ -1,11 +1,10 @@
 import { BoardCell } from '../components/cell/Cell';
 import BaseTetromino from './tetrominoes/BaseTetromino';
-import { CELL_COL_COUNT, CELL_ROW_COUNT } from '../constants/generalConstants';
 import TetrominoBuilder from './tetrominoes/TetrominoBuilder';
 
-export const generateTetromino = (): BaseTetromino => {
+export const generateTetromino = (cellColCount: number): BaseTetromino => {
   const builder = new TetrominoBuilder({
-    xPosition: Math.floor(CELL_COL_COUNT / 2),
+    xPosition: Math.floor(cellColCount / 2),
     yPosition: 0,
   });
 
@@ -48,20 +47,26 @@ export const moveLeft = (tetromino: BaseTetromino): BaseTetromino => {
   return tetromino;
 };
 
-export const moveRight = (tetromino: BaseTetromino): BaseTetromino => {
+export const moveRight = (
+  tetromino: BaseTetromino,
+  cellColCount: number,
+): BaseTetromino => {
   const cells = tetromino.getCells();
 
-  if (cells.every((cell) => cell.xPosition < CELL_COL_COUNT - 1)) {
+  if (cells.every((cell) => cell.xPosition < cellColCount - 1)) {
     tetromino.moveTetromino(1, 0);
   }
 
   return tetromino;
 };
 
-export const moveDown = (tetromino: BaseTetromino): BaseTetromino => {
+export const moveDown = (
+  tetromino: BaseTetromino,
+  cellRowCount: number,
+): BaseTetromino => {
   const cells = tetromino.getCells();
 
-  if (cells.every((cell) => cell.yPosition < CELL_ROW_COUNT - 1)) {
+  if (cells.every((cell) => cell.yPosition < cellRowCount - 1)) {
     tetromino.moveTetromino(0, 1);
   }
 
@@ -71,17 +76,19 @@ export const moveDown = (tetromino: BaseTetromino): BaseTetromino => {
 export const checkCollision = (
   upcomingCells: BoardCell[],
   cells: BoardCell[],
+  cellRowCount: number,
+  cellColCount: number,
 ): boolean => {
   const anyCollision: boolean = upcomingCells.some((upcomingCell) =>
     cellsIncludes(cells, upcomingCell),
   );
 
   const isAtBottomEdge: boolean = upcomingCells.some(
-    (upcomingCell) => upcomingCell.yPosition === CELL_ROW_COUNT,
+    (upcomingCell) => upcomingCell.yPosition === cellRowCount,
   );
 
   const isExceedRightSide: boolean = upcomingCells.some(
-    (upcomingCell) => upcomingCell.xPosition >= CELL_COL_COUNT,
+    (upcomingCell) => upcomingCell.xPosition >= cellColCount,
   );
 
   const isExceedLeftSide: boolean = upcomingCells.some(
@@ -104,15 +111,18 @@ export const cellsIncludes = (
   );
 };
 
-export const clearFullRows = (cells: BoardCell[]): BoardCell[] => {
-  const colCounts = Array(CELL_ROW_COUNT).fill(0);
+export const clearFullRows = (
+  cells: BoardCell[],
+  cellRowCount: number,
+): BoardCell[] => {
+  const colCounts = Array(cellRowCount).fill(0);
 
   for (let cell of cells) {
     colCounts[cell.yPosition]++;
   }
 
-  for (let row = 0; row < CELL_ROW_COUNT; row++) {
-    if (colCounts[row] === CELL_COL_COUNT) {
+  for (let row = 0; row < cellRowCount; row++) {
+    if (colCounts[row] === cellRowCount) {
       cells = cells
         .filter((cell) => cell.yPosition !== row)
         .map(
@@ -129,7 +139,7 @@ export const clearFullRows = (cells: BoardCell[]): BoardCell[] => {
 
 export const is_touch_device = () => {
   var prefixes = ' -webkit- -moz- -o- -ms- '.split(' ');
-  var mq = function(query: string) {
+  var mq = function (query: string) {
     return window.matchMedia(query).matches;
   };
 

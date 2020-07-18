@@ -5,14 +5,28 @@ import Header from '../components/header/Header';
 import Home from '../views/home/Home';
 import Play from '../views/play/Play';
 import Settings from '../views/settings/Settings';
+import { useGameSettings } from '../hooks/useGameSettings';
 
 const Routes: React.FC = () => {
+  const {
+    gameSettings: { speed, cellRowCount, cellColCount },
+  } = useGameSettings();
+
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <Header />
       <div className="view-container">
         <Route exact path="/" component={Home} />
-        <Route path="/play" component={Play} />
+        <Route
+          path="/play"
+          component={() => (
+            <Play
+              speed={speed}
+              cellColCount={cellColCount}
+              cellRowCount={cellRowCount}
+            />
+          )}
+        />
         <Route path="/settings" component={Settings} />
       </div>
     </Router>
