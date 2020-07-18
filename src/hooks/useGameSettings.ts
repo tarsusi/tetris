@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useReducer, createContext } from 'react';
 
-export interface GameSettings {
+export type SpeedSetting = 'slow' | 'normal' | 'fast';
+
+export interface IGameSettings {
   cellRowCount: number;
   cellColCount: number;
   cellRadius: number;
@@ -8,50 +10,122 @@ export interface GameSettings {
   boardHeight: number;
   cellWidth: number;
   cellHeight: number;
-  speed: number;
+  speed: SpeedSetting;
 }
 
+export const initialState: IGameSettings = {
+  cellRowCount: 16,
+  cellColCount: 12,
+  cellRadius: 4,
+  boardWidth: 1200,
+  boardHeight: 1600,
+  cellWidth: 100,
+  cellHeight: 100,
+  speed: 'normal',
+};
+
+enum GameSettingsActionType {
+  UPDATE_BOARD_WIDTH = 'UPDATE_BOARD_WIDTH',
+  UPDATE_BOARD_HEIGHT = 'UPDATE_BOARD_HEIGHT',
+  UPDATE_ROW_COUNT = 'UPDATE_ROW_COUNT',
+  UPDATE_COL_COUNT = 'UPDATE_COL_COUNT',
+  UPDATE_SPEED = 'UPDATE_SPEED',
+  UPDATE_RADIUS = 'UPDATE_RADIUS',
+}
+
+function gameSettingsReducer(
+  state: IGameSettings,
+  action:
+    | { type: GameSettingsActionType; payload: number }
+    | { type: GameSettingsActionType; payload: SpeedSetting },
+): IGameSettings {
+  switch (action.type) {
+    case GameSettingsActionType.UPDATE_ROW_COUNT:
+      return {
+        ...state,
+        cellRowCount: action.payload as number,
+        cellHeight: state.boardHeight / (action.payload as number),
+      };
+    case GameSettingsActionType.UPDATE_COL_COUNT:
+      return {
+        ...state,
+        cellColCount: action.payload as number,
+        cellWidth: state.boardWidth / (action.payload as number),
+      };
+    case GameSettingsActionType.UPDATE_SPEED:
+      return {
+        ...state,
+        speed: action.payload as SpeedSetting,
+      };
+    case GameSettingsActionType.UPDATE_RADIUS:
+      return {
+        ...state,
+        cellRadius: action.payload as number,
+      };
+    case GameSettingsActionType.UPDATE_BOARD_WIDTH:
+      return {
+        ...state,
+        boardWidth: action.payload as number,
+        cellWidth: (action.payload as number) / state.cellColCount,
+      };
+    case GameSettingsActionType.UPDATE_BOARD_HEIGHT:
+      return {
+        ...state,
+        boardHeight: action.payload as number,
+        cellHeight: (action.payload as number) / state.cellRowCount,
+      };
+    default:
+      return state;
+  }
+}
+
+export const GameSettingsContext = createContext({
+  gameSettings: initialState,
+  updateRowCount: (cellRowCount: number) => {},
+  updateColCount: (cellColCount: number) => {},
+  updateCellRadius: (cellRadius: number) => {},
+  updateBoardWidth: (boardWidth: number) => {},
+  updateBoardHeight: (boardHeight: number) => {},
+  updateAnimationSpeed: (speed: SpeedSetting) => {},
+});
+
 export const useGameSettings = () => {
-  const [gameSettings, setGameSettings] = useState<GameSettings>({
-    cellRowCount: 16,
-    cellColCount: 12,
-    cellRadius: 4,
-    boardWidth: 1200,
-    boardHeight: 1600,
-    cellWidth: 100,
-    cellHeight: 100,
-    speed: 1000,
-  });
+  const [gameSettings, dispatch] = useReducer(
+    gameSettingsReducer,
+    initialState,
+  );
 
   return {
     gameSettings,
     updateRowCount: (cellRowCount: number) =>
-      setGameSettings({
-        ...gameSettings,
-        cellRowCount,
-        cellHeight: gameSettings.boardHeight / cellRowCount,
+      dispatch({
+        type: GameSettingsActionType.UPDATE_ROW_COUNT,
+        payload: cellRowCount,
       }),
     updateColCount: (cellColCount: number) =>
-      setGameSettings({
-        ...gameSettings,
-        cellColCount,
-        cellWidth: gameSettings.boardWidth / cellColCount,
+      dispatch({
+        type: GameSettingsActionType.UPDATE_COL_COUNT,
+        payload: cellColCount,
       }),
     updateCellRadius: (cellRadius: number) =>
-      setGameSettings({ ...gameSettings, cellRadius }),
+      dispatch({
+        type: GameSettingsActionType.UPDATE_RADIUS,
+        payload: cellRadius,
+      }),
     updateBoardWidth: (boardWidth: number) =>
-      setGameSettings({
-        ...gameSettings,
-        boardWidth,
-        cellWidth: boardWidth / gameSettings.cellColCount,
+      dispatch({
+        type: GameSettingsActionType.UPDATE_BOARD_WIDTH,
+        payload: boardWidth,
       }),
     updateBoardHeight: (boardHeight: number) =>
-      setGameSettings({
-        ...gameSettings,
-        boardHeight,
-        cellHeight: boardHeight / gameSettings.cellRowCount,
+      dispatch({
+        type: GameSettingsActionType.UPDATE_BOARD_HEIGHT,
+        payload: boardHeight,
       }),
-    updateAnimationSpeed: (speed: number) =>
-      setGameSettings({ ...gameSettings, speed }),
+    updateAnimationSpeed: (speed: SpeedSetting) =>
+      dispatch({
+        type: GameSettingsActionType.UPDATE_SPEED,
+        payload: speed,
+      }),
   };
 };
