@@ -1,3 +1,5 @@
+export const NORMAL_GAME_SPEED = 1000;
+
 // these color codes are taken from https://jariz.github.io/vibrant.js/
 export const TETROMINO_COLOR_PALLETTE = [
   'rgb(227, 76, 74)',

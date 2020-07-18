@@ -1,6 +1,8 @@
 import { BoardCell } from '../components/cell/Cell';
 import BaseTetromino from './tetrominoes/BaseTetromino';
 import TetrominoBuilder from './tetrominoes/TetrominoBuilder';
+import { SpeedSetting } from '../hooks/useGameSettings';
+import { NORMAL_GAME_SPEED } from '../constants/generalConstants';
 
 export const generateTetromino = (cellColCount: number): BaseTetromino => {
   const builder = new TetrominoBuilder({
@@ -151,4 +153,14 @@ export const is_touch_device = () => {
   // https://git.io/vznFH
   var query = ['(', prefixes.join('touch-enabled),('), 'heartz', ')'].join('');
   return mq(query);
+};
+
+export const toGameSpeed = (speed: SpeedSetting) => {
+  if (speed === 'slow') {
+    return NORMAL_GAME_SPEED * 2;
+  } else if (speed === 'normal') {
+    return NORMAL_GAME_SPEED;
+  }
+
+  return NORMAL_GAME_SPEED / 2;
 };
