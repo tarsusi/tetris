@@ -1,0 +1,39 @@
+.settings-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .nes-container {
+    .nes-field {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      &:not(:last-child) {
+        margin-bottom: 16px;
+      }
+
+      input[type='number'] {
+        width: 25%;
+      }
+
+      .nes-radio-container {
+        display: flex;
+        align-items: center;
+
+        .nes-radio-label {
+          display: flex;
+          align-items: center;
+          &:not(:first-child) {
+            padding-left: 12px;
+          }
+        }
+
+        .nes-radio:checked + span::before {
+          top: 2px;
+        }
+      }
+    }
+  }
+}
