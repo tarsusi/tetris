@@ -1,10 +1,10 @@
-import React, { useState, useLayoutEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useRef, useContext } from 'react';
 
 import { Cell, BoardCell } from '../cell/Cell';
 import BaseTetromino from '../../utils/tetrominoes/BaseTetromino';
 
 import './game-board.scss';
-import { useGameSettings } from '../../hooks/useGameSettings';
+import { GameSettingsContext } from '../../hooks/useGameSettings';
 
 interface GameBoardProps {
   cells?: BoardCell[];
@@ -74,7 +74,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
 }) => {
   let svgRef: any = useRef(null);
   const [[width, height], setSize] = useState([0, 0]);
-  const { gameSettings } = useGameSettings();
+  const { gameSettings } = useContext(GameSettingsContext);
   useLayoutEffect(() => {
     const updateSize = () => {
       const aspectRatio = 4 / 3;

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './cell.scss';
-import { useGameSettings } from '../../hooks/useGameSettings';
+import { GameSettingsContext } from '../../hooks/useGameSettings';
 
 export interface BoardCell {
   xPosition: number;
@@ -18,7 +18,7 @@ export const Cell: React.FC<CellProps> = ({
 }) => {
   const {
     gameSettings: { cellWidth, cellHeight, cellRadius },
-  } = useGameSettings();
+  } = useContext(GameSettingsContext);
   return (
     <rect
       className="game-cell"
