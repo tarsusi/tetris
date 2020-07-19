@@ -1,10 +1,9 @@
 import React, { useState, useLayoutEffect, useRef, useContext } from 'react';
 
-import { Cell, BoardCell } from '../cell/Cell';
-import BaseTetromino from '../../utils/tetrominoes/BaseTetromino';
-
+import { Cell, BoardCell } from 'components/cell/Cell';
+import BaseTetromino from 'utils/tetrominoes/BaseTetromino';
 import './game-board.scss';
-import { GameSettingsContext } from '../../hooks/useGameSettings';
+import { GameSettingsContext } from 'hooks/useGameSettings';
 
 interface GameBoardProps {
   cells?: BoardCell[];

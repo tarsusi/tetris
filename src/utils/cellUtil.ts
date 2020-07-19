@@ -1,8 +1,9 @@
-import { BoardCell } from '../components/cell/Cell';
+import { BoardCell } from 'components/cell/Cell';
+import { SpeedSetting } from 'hooks/useGameSettings';
+import { NORMAL_GAME_SPEED } from 'constants/generalConstants';
+
 import BaseTetromino from './tetrominoes/BaseTetromino';
 import TetrominoBuilder from './tetrominoes/TetrominoBuilder';
-import { SpeedSetting } from '../hooks/useGameSettings';
-import { NORMAL_GAME_SPEED } from '../constants/generalConstants';
 
 export const generateTetromino = (cellColCount: number): BaseTetromino => {
   const builder = new TetrominoBuilder({

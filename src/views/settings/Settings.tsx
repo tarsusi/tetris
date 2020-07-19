@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
+import { GameSettingsContext } from 'hooks/useGameSettings';
 import './settings.scss';
-import { GameSettingsContext } from '../../hooks/useGameSettings';
 
 const Settings: React.FC = () => {
   const {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import './keyboard-manager.scss';
-import { is_touch_device } from '../../utils/cellUtil';
+import { is_touch_device } from 'utils/cellUtil';
 
 interface Props {
   onKeysChanged(keys: String[]): void;

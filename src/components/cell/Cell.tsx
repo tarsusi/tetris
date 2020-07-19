@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import './cell.scss';
-import { GameSettingsContext } from '../../hooks/useGameSettings';
+import { GameSettingsContext } from 'hooks/useGameSettings';
 
 export interface BoardCell {
   xPosition: number;

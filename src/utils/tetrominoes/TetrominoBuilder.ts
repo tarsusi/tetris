@@ -7,9 +7,9 @@ import Tetromino_I from './Tetromino_I';
 import Tetromino_L from './Tetromino_L';
 import Tetromino_J from './Tetromino_J';
 
-import { BoardCell } from '../../components/cell/Cell';
+import { BoardCell } from 'components/cell/Cell';
 
-import { TETROMINO_COLOR_PALLETTE } from '../../constants/generalConstants';
+import { TETROMINO_COLOR_PALLETTE } from 'constants/generalConstants';
 
 export default class TetrominoBuilder {
   private tetromino: BaseTetromino;

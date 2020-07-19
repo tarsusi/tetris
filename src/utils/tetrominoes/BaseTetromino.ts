@@ -1,4 +1,4 @@
-import { BoardCell } from '../../components/cell/Cell';
+import { BoardCell } from 'components/cell/Cell';
 
 export default abstract class BaseTetromino {
   abstract cellStates(centerCell: BoardCell): BoardCell[][];

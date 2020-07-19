@@ -1,6 +1,6 @@
 import Tetromino from './BaseTetromino';
-import { BoardCell } from '../../components/cell/Cell';
-import { getNeighborCell } from '../cellUtil';
+import { BoardCell } from 'components/cell/Cell';
+import { getNeighborCell } from 'utils/cellUtil';
 
 export default class Tetromino_T extends Tetromino {
   cellStates = (centerCell: BoardCell) => [

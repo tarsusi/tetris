@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import Header from '../components/header/Header';
-import Home from '../views/home/Home';
-import Play from '../views/play/Play';
-import Settings from '../views/settings/Settings';
-import { GameSettingsContext } from '../hooks/useGameSettings';
+import Header from 'components/header/Header';
+import Home from 'views/home/Home';
+import Play from 'views/play/Play';
+import Settings from 'views/settings/Settings';
+import { GameSettingsContext } from 'hooks/useGameSettings';
 
 const Routes: React.FC = () => {
   const {

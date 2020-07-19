@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import GameBoard from '../../components/game-board/GameBoard';
-import KeyboardManager from '../../components/keyboard-manager/KeyboardManager';
-import { BoardCell } from '../../components/cell/Cell';
+import GameBoard from 'components/game-board/GameBoard';
+import KeyboardManager from 'components/keyboard-manager/KeyboardManager';
+import { BoardCell } from 'components/cell/Cell';
 
-import BaseTetromino from '../../utils/tetrominoes/BaseTetromino';
+import BaseTetromino from 'utils/tetrominoes/BaseTetromino';
 import {
   moveDown,
   moveLeft,
@@ -14,10 +14,10 @@ import {
   clearFullRows,
   generateTetromino,
   toGameSpeed,
-} from '../../utils/cellUtil';
+} from 'utils/cellUtil';
 
 import './play.scss';
-import { SpeedSetting } from '../../hooks/useGameSettings';
+import { SpeedSetting } from 'hooks/useGameSettings';
 
 interface Props {
   cellColCount: number;
