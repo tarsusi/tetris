@@ -19,11 +19,14 @@ const Settings: React.FC = () => {
     updateBoardWidth,
     updateBoardHeight,
     updateAnimationSpeed,
+    resetSettings,
   } = useContext(GameSettingsContext);
   return (
     <div className="settings-container">
       <div className="nes-container with-title is-centered">
-        <p className="title nes-text is-primary">Settings</p>
+        <p className="title nes-text is-primary">
+          <i className="nes-logo"></i>
+        </p>
         <div className="nes-container-body">
           <div className="nes-field">
             <label htmlFor="board-width">Board Width</label>
@@ -126,6 +129,33 @@ const Settings: React.FC = () => {
               </label>
             </div>
           </div>
+          <section>
+            <button
+              type="button"
+              className="nes-btn"
+              onClick={() => {
+                (document.getElementById(
+                  'dialog-default',
+                ) as HTMLDialogElement).showModal();
+              }}
+            >
+              Reset
+            </button>
+            <dialog className="nes-dialog is-centered" id="dialog-default">
+              <form method="dialog">
+                <p className="title">Are you sure?</p>
+                <menu className="dialog-menu">
+                  <button className="nes-btn">No</button>
+                  <button
+                    className="nes-btn is-primary"
+                    onClick={resetSettings}
+                  >
+                    Yes
+                  </button>
+                </menu>
+              </form>
+            </dialog>
+          </section>
         </div>
       </div>
     </div>

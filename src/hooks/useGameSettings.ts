@@ -31,13 +31,14 @@ enum GameSettingsActionType {
   UPDATE_COL_COUNT = 'UPDATE_COL_COUNT',
   UPDATE_SPEED = 'UPDATE_SPEED',
   UPDATE_RADIUS = 'UPDATE_RADIUS',
+  RESET_SETTINGS = 'RESET_SETTINGS',
 }
 
 function gameSettingsReducer(
   state: IGameSettings,
   action:
-    | { type: GameSettingsActionType; payload: number }
-    | { type: GameSettingsActionType; payload: SpeedSetting },
+    | { type: GameSettingsActionType; payload?: number }
+    | { type: GameSettingsActionType; payload?: SpeedSetting },
 ): IGameSettings {
   switch (action.type) {
     case GameSettingsActionType.UPDATE_ROW_COUNT:
@@ -74,29 +75,40 @@ function gameSettingsReducer(
         boardHeight: action.payload as number,
         cellHeight: (action.payload as number) / state.cellRowCount,
       };
+    case GameSettingsActionType.RESET_SETTINGS:
+      return initialState;
     default:
       return state;
   }
 }
 
 export const GameSettingsContext = createContext({
-  gameSettings: initialState,
+  gameSettings:
+    JSON.parse(localStorage.getItem('gameSettings') as string) || initialState,
   updateRowCount: (cellRowCount: number) => {},
   updateColCount: (cellColCount: number) => {},
   updateCellRadius: (cellRadius: number) => {},
   updateBoardWidth: (boardWidth: number) => {},
   updateBoardHeight: (boardHeight: number) => {},
   updateAnimationSpeed: (speed: SpeedSetting) => {},
+  resetSettings: () => {},
 });
 
 export const useGameSettings = () => {
   const [gameSettings, dispatch] = useReducer(
     gameSettingsReducer,
-    initialState,
+    JSON.parse(localStorage.getItem('gameSettings') as string) || initialState,
   );
+
+  localStorage.setItem('gameSettings', JSON.stringify(gameSettings));
 
   return {
     gameSettings,
+    resetSettings: () => {
+      dispatch({
+        type: GameSettingsActionType.RESET_SETTINGS,
+      });
+    },
     updateRowCount: (cellRowCount: number) =>
       dispatch({
         type: GameSettingsActionType.UPDATE_ROW_COUNT,
