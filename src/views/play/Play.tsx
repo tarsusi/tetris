@@ -97,7 +97,11 @@ class Play extends Component<Props, State> {
             }
 
             return {
-              cells: clearFullRows(cells, this.props.cellRowCount),
+              cells: clearFullRows(
+                cells,
+                this.props.cellRowCount,
+                this.props.cellColCount,
+              ),
               isGameOver: gameOver,
               tetromino: newTetromino,
               pressedKeys: [],

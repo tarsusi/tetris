@@ -116,6 +116,7 @@ export const cellsIncludes = (
 export const clearFullRows = (
   cells: BoardCell[],
   cellRowCount: number,
+  cellColCount: number,
 ): BoardCell[] => {
   const colCounts = Array(cellRowCount).fill(0);
 
@@ -124,7 +125,7 @@ export const clearFullRows = (
   }
 
   for (let row = 0; row < cellRowCount; row++) {
-    if (colCounts[row] === cellRowCount) {
+    if (colCounts[row] === cellColCount) {
       cells = cells
         .filter((cell) => cell.yPosition !== row)
         .map(
