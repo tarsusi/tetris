@@ -16,8 +16,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Packages
-        run: npm install
+        run: yarn install
       - name: Deploy to GH Pages
-        run: npm run deploy
-      - name: Updating Domain
-        run: echo "Update domain"
+        run: |
+          git config global user.email ${{secrets.EMAIL_ADDRESS}}
+          git config global user.name ${{secrets.USERNAME}}
+          git remote set-url origin https://${{secrets.ACCESS_TOKEN_FOR_GITHUB_PAGES}}@github.com/${{secrets.USERNAME}}/tetris.git
+          yarn run deploy
