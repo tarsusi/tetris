@@ -1,5 +1,5 @@
-import { BoardCell } from 'components/cell/Cell';
-import { SpeedSetting } from 'hooks/useGameSettings';
+import { IBoardCell } from 'types/interfaces/IBoardCell';
+import { SpeedSetting } from 'types';
 import { NORMAL_GAME_SPEED } from 'constants/generalConstants';
 
 import BaseTetromino from './tetrominoes/BaseTetromino';
@@ -15,10 +15,10 @@ export const generateTetromino = (cellColCount: number): BaseTetromino => {
 };
 
 export const getNeighborCell = (
-  { xPosition, yPosition, ...others }: BoardCell,
+  { xPosition, yPosition, ...others }: IBoardCell,
   xMovement: number,
   yMovement: number,
-): BoardCell => {
+): IBoardCell => {
   return {
     ...others,
     xPosition: xPosition + xMovement,
@@ -27,12 +27,12 @@ export const getNeighborCell = (
 };
 
 export const getNeighborCells = (
-  cells: BoardCell[],
+  cells: IBoardCell[],
   xMovement: number,
   yMovement: number,
-): BoardCell[] => {
+): IBoardCell[] => {
   return cells.map(
-    ({ xPosition, yPosition, ...others }): BoardCell => ({
+    ({ xPosition, yPosition, ...others }): IBoardCell => ({
       ...others,
       xPosition: xPosition + xMovement,
       yPosition: yPosition + yMovement,
@@ -77,8 +77,8 @@ export const moveDown = (
 };
 
 export const checkCollision = (
-  upcomingCells: BoardCell[],
-  cells: BoardCell[],
+  upcomingCells: IBoardCell[],
+  cells: IBoardCell[],
   cellRowCount: number,
   cellColCount: number,
 ): boolean => {
@@ -104,8 +104,8 @@ export const checkCollision = (
 };
 
 export const cellsIncludes = (
-  cells: BoardCell[],
-  otherCell: BoardCell,
+  cells: IBoardCell[],
+  otherCell: IBoardCell,
 ): boolean => {
   return cells.some(
     (cell) =>
@@ -115,10 +115,10 @@ export const cellsIncludes = (
 };
 
 export const clearFullRows = (
-  cells: BoardCell[],
+  cells: IBoardCell[],
   cellRowCount: number,
   cellColCount: number,
-): BoardCell[] => {
+): IBoardCell[] => {
   const colCounts = Array(cellRowCount).fill(0);
 
   for (let cell of cells) {
@@ -130,7 +130,7 @@ export const clearFullRows = (
       cells = cells
         .filter((cell) => cell.yPosition !== row)
         .map(
-          ({ yPosition, ...others }): BoardCell => ({
+          ({ yPosition, ...others }): IBoardCell => ({
             ...others,
             yPosition: yPosition < row ? yPosition + 1 : yPosition,
           }),

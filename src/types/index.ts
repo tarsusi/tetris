@@ -1,1 +1,1 @@
-export const a = {};
+export type SpeedSetting = 'slow' | 'normal' | 'fast';

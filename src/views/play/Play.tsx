@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import GameBoard from 'components/game-board/GameBoard';
 import KeyboardManager from 'components/keyboard-manager/KeyboardManager';
-import { BoardCell } from 'components/cell/Cell';
 
 import BaseTetromino from 'utils/tetrominoes/BaseTetromino';
 import {
@@ -17,24 +16,12 @@ import {
 } from 'utils/cellUtil';
 
 import './play.scss';
-import { SpeedSetting } from 'hooks/useGameSettings';
+import { SpeedSetting } from 'types';
+import { IPlayProps } from 'types/interfaces/IPlayProps';
+import { IPlayState } from 'types/interfaces/IPlayState';
 
-interface Props {
-  cellColCount: number;
-  cellRowCount: number;
-  speed: SpeedSetting;
-}
-
-interface State {
-  cells: BoardCell[];
-  isGameOver: boolean;
-  isGameStart: boolean;
-  pressedKeys: String[];
-  tetromino?: BaseTetromino;
-}
-
-class Play extends Component<Props, State> {
-  state: State = {
+class Play extends Component<IPlayProps, IPlayState> {
+  state: IPlayState = {
     cells: [],
     isGameOver: false,
     isGameStart: false,
