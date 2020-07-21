@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/tetris/static/css/main.edb83f57.chunk.css",
+    "main.js": "/tetris/static/js/main.98076810.chunk.js",
+    "main.js.map": "/tetris/static/js/main.98076810.chunk.js.map",
+    "runtime-main.js": "/tetris/static/js/runtime-main.0d8747ab.js",
+    "runtime-main.js.map": "/tetris/static/js/runtime-main.0d8747ab.js.map",
+    "static/js/2.69ce2885.chunk.js": "/tetris/static/js/2.69ce2885.chunk.js",
+    "static/js/2.69ce2885.chunk.js.map": "/tetris/static/js/2.69ce2885.chunk.js.map",
+    "index.html": "/tetris/index.html",
+    "precache-manifest.1a665b929d7a2efef9bd19cc0c3091d4.js": "/tetris/precache-manifest.1a665b929d7a2efef9bd19cc0c3091d4.js",
+    "service-worker.js": "/tetris/service-worker.js",
+    "static/css/main.edb83f57.chunk.css.map": "/tetris/static/css/main.edb83f57.chunk.css.map",
+    "static/js/2.69ce2885.chunk.js.LICENSE.txt": "/tetris/static/js/2.69ce2885.chunk.js.LICENSE.txt",
+    "static/media/index.scss": "/tetris/static/media/RetroGaming.4c19fc87.ttf"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0d8747ab.js",
+    "static/js/2.69ce2885.chunk.js",
+    "static/css/main.edb83f57.chunk.css",
+    "static/js/main.98076810.chunk.js"
+  ]
+}
