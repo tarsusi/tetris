@@ -15,13 +15,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install Packages 🔧
+      - name: Install Packages
         run: yarn install
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+      - name: Deploy to GH Pages
+        uses: crazy-max/ghaction-github-pages@v2
         with:
+          target_branch: gh-pages
+          build_dir: public
+        env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_FOR_GITHUB_PAGES }}
-          BRANCH: gh-pages
-          FOLDER: build
       - name: Updating Domain
         run: echo "Update domain"
