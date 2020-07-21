@@ -1,17 +1,9 @@
 import React, { useContext } from 'react';
 import './cell.scss';
-import { GameSettingsContext } from '../../hooks/useGameSettings';
+import { GameSettingsContext } from 'hooks/useGameSettings';
+import { ICellProps } from 'types/interfaces/ICellProps';
 
-export interface BoardCell {
-  xPosition: number;
-  yPosition: number;
-  isMoving?: boolean;
-  color?: string;
-}
-
-export interface CellProps extends BoardCell {}
-
-export const Cell: React.FC<CellProps> = ({
+export const Cell: React.FC<ICellProps> = ({
   xPosition,
   yPosition,
   color = 'red',

@@ -1,9 +1,10 @@
+import { IBoardCell } from 'types/interfaces/IBoardCell';
+
 import Tetromino from './BaseTetromino';
-import { BoardCell } from '../../components/cell/Cell';
-import { getNeighborCell } from '../cellUtil';
+import { getNeighborCell } from 'utils/cellUtil';
 
 export default class Tetromino_D extends Tetromino {
-  cellStates = (centerCell: BoardCell) => [
+  cellStates = (centerCell: IBoardCell) => [
     [
       centerCell,
       getNeighborCell(centerCell, 1, 0),
@@ -14,7 +15,7 @@ export default class Tetromino_D extends Tetromino {
 
   stateCount = 1;
 
-  constructor(centerCell: BoardCell) {
+  constructor(centerCell: IBoardCell) {
     super(centerCell);
 
     this.cells = this.cellStates(this.centerCell)[this.currentState];

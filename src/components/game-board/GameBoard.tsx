@@ -1,16 +1,13 @@
 import React, { useState, useLayoutEffect, useRef, useContext } from 'react';
 
-import { Cell, BoardCell } from '../cell/Cell';
-import BaseTetromino from '../../utils/tetrominoes/BaseTetromino';
+import { Cell } from 'components/cell/Cell';
+
+import { IBoardCell } from 'types/interfaces/IBoardCell';
+import { IGameBoardProps } from 'types/interfaces/IGameBoardProps';
+
+import { GameSettingsContext } from 'hooks/useGameSettings';
 
 import './game-board.scss';
-import { GameSettingsContext } from '../../hooks/useGameSettings';
-
-interface GameBoardProps {
-  cells?: BoardCell[];
-  showGrid?: boolean;
-  tetromino?: BaseTetromino;
-}
 
 const generateSeparators = (
   boardWidth: number,
@@ -53,7 +50,7 @@ const generateSeparators = (
   return separators;
 };
 
-const renderCells = (cells?: BoardCell[]) => {
+const renderCells = (cells?: IBoardCell[]) => {
   return (
     cells &&
     cells.map(({ xPosition, yPosition, color }) => (
@@ -67,7 +64,7 @@ const renderCells = (cells?: BoardCell[]) => {
   );
 };
 
-const GameBoard: React.FC<GameBoardProps> = ({
+const GameBoard: React.FC<IGameBoardProps> = ({
   cells,
   showGrid,
   tetromino,

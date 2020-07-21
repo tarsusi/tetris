@@ -5,6 +5,13 @@
   justify-content: center;
 
   .nes-container {
+    .nes-text.title {
+      .nes-logo {
+        margin-top: -16px;
+        margin-bottom: 16px;
+      }
+    }
+
     .nes-field {
       display: flex;
       align-items: center;
@@ -32,6 +39,17 @@
 
         .nes-radio:checked + span::before {
           top: 2px;
+        }
+      }
+    }
+
+    .nes-dialog {
+      .dialog-menu {
+        padding: 0;
+        margin-top: 16px;
+
+        .nes-btn {
+          margin: 8px 12px 0 12px;
         }
       }
     }

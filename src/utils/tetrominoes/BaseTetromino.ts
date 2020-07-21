@@ -1,22 +1,22 @@
-import { BoardCell } from '../../components/cell/Cell';
+import { IBoardCell } from 'types/interfaces/IBoardCell';
 
 export default abstract class BaseTetromino {
-  abstract cellStates(centerCell: BoardCell): BoardCell[][];
+  abstract cellStates(centerCell: IBoardCell): IBoardCell[][];
   abstract stateCount: number;
 
-  protected cells: BoardCell[] = [];
-  protected centerCell: BoardCell;
+  protected cells: IBoardCell[] = [];
+  protected centerCell: IBoardCell;
   protected currentState: number = 0;
 
-  constructor(centerCell: BoardCell) {
+  constructor(centerCell: IBoardCell) {
     this.centerCell = centerCell;
   }
 
-  public getCells(): BoardCell[] {
+  public getCells(): IBoardCell[] {
     return this.cells.map((cell) => ({ ...cell }));
   }
 
-  public getNextStateCells(): BoardCell[] {
+  public getNextStateCells(): IBoardCell[] {
     const nextState = (this.currentState + 1) % this.stateCount;
 
     return this.cellStates(this.centerCell)[nextState];

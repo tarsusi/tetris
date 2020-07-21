@@ -7,14 +7,14 @@ import Tetromino_I from './Tetromino_I';
 import Tetromino_L from './Tetromino_L';
 import Tetromino_J from './Tetromino_J';
 
-import { BoardCell } from '../../components/cell/Cell';
+import { IBoardCell } from 'types/interfaces/IBoardCell';
 
-import { TETROMINO_COLOR_PALLETTE } from '../../constants/generalConstants';
+import { TETROMINO_COLOR_PALLETTE } from 'constants/generalConstants';
 
 export default class TetrominoBuilder {
   private tetromino: BaseTetromino;
 
-  constructor(centerCell: BoardCell) {
+  constructor(centerCell: IBoardCell) {
     this.tetromino = this.buildNextTetromino({
       ...centerCell,
       color:
@@ -24,7 +24,7 @@ export default class TetrominoBuilder {
     });
   }
 
-  private buildNextTetromino(centerCell: BoardCell): BaseTetromino {
+  private buildNextTetromino(centerCell: IBoardCell): BaseTetromino {
     const tetrominoes: BaseTetromino[] = [
       new Tetromino_T(centerCell),
       new Tetromino_D(centerCell),

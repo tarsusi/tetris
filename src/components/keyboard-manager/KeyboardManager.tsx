@@ -1,25 +1,21 @@
 import React, { Component } from 'react';
 
 import './keyboard-manager.scss';
-import { is_touch_device } from '../../utils/cellUtil';
+import { is_touch_device } from 'utils/cellUtil';
+import { IKeyboardManagerProps } from 'types/interfaces/IKeyboarManagerProps';
+import { IKeyboardManagerState } from 'types/interfaces/IKeyboarManagerState';
 
-interface Props {
-  onKeysChanged(keys: String[]): void;
-  pressedKeys: String[];
-}
-
-interface State {
-  pressedKey: string;
-}
-
-class KeyboardManager extends Component<Props, State> {
+class KeyboardManager extends Component<
+  IKeyboardManagerProps,
+  IKeyboardManagerState
+> {
   state = {
     pressedKey: '',
   };
 
   private middleEl: React.RefObject<HTMLInputElement>;
 
-  constructor(props: Props) {
+  constructor(props: IKeyboardManagerProps) {
     super(props);
 
     this.middleEl = React.createRef();

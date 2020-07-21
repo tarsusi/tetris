@@ -1,8 +1,9 @@
-import { BoardCell } from '../components/cell/Cell';
+import { IBoardCell } from 'types/interfaces/IBoardCell';
+import { SpeedSetting } from 'types';
+import { NORMAL_GAME_SPEED } from 'constants/generalConstants';
+
 import BaseTetromino from './tetrominoes/BaseTetromino';
 import TetrominoBuilder from './tetrominoes/TetrominoBuilder';
-import { SpeedSetting } from '../hooks/useGameSettings';
-import { NORMAL_GAME_SPEED } from '../constants/generalConstants';
 
 export const generateTetromino = (cellColCount: number): BaseTetromino => {
   const builder = new TetrominoBuilder({
@@ -14,10 +15,10 @@ export const generateTetromino = (cellColCount: number): BaseTetromino => {
 };
 
 export const getNeighborCell = (
-  { xPosition, yPosition, ...others }: BoardCell,
+  { xPosition, yPosition, ...others }: IBoardCell,
   xMovement: number,
   yMovement: number,
-): BoardCell => {
+): IBoardCell => {
   return {
     ...others,
     xPosition: xPosition + xMovement,
@@ -26,12 +27,12 @@ export const getNeighborCell = (
 };
 
 export const getNeighborCells = (
-  cells: BoardCell[],
+  cells: IBoardCell[],
   xMovement: number,
   yMovement: number,
-): BoardCell[] => {
+): IBoardCell[] => {
   return cells.map(
-    ({ xPosition, yPosition, ...others }): BoardCell => ({
+    ({ xPosition, yPosition, ...others }): IBoardCell => ({
       ...others,
       xPosition: xPosition + xMovement,
       yPosition: yPosition + yMovement,
@@ -76,8 +77,8 @@ export const moveDown = (
 };
 
 export const checkCollision = (
-  upcomingCells: BoardCell[],
-  cells: BoardCell[],
+  upcomingCells: IBoardCell[],
+  cells: IBoardCell[],
   cellRowCount: number,
   cellColCount: number,
 ): boolean => {
@@ -103,8 +104,8 @@ export const checkCollision = (
 };
 
 export const cellsIncludes = (
-  cells: BoardCell[],
-  otherCell: BoardCell,
+  cells: IBoardCell[],
+  otherCell: IBoardCell,
 ): boolean => {
   return cells.some(
     (cell) =>
@@ -114,9 +115,10 @@ export const cellsIncludes = (
 };
 
 export const clearFullRows = (
-  cells: BoardCell[],
+  cells: IBoardCell[],
   cellRowCount: number,
-): BoardCell[] => {
+  cellColCount: number,
+): IBoardCell[] => {
   const colCounts = Array(cellRowCount).fill(0);
 
   for (let cell of cells) {
@@ -124,11 +126,11 @@ export const clearFullRows = (
   }
 
   for (let row = 0; row < cellRowCount; row++) {
-    if (colCounts[row] === cellRowCount) {
+    if (colCounts[row] === cellColCount) {
       cells = cells
         .filter((cell) => cell.yPosition !== row)
         .map(
-          ({ yPosition, ...others }): BoardCell => ({
+          ({ yPosition, ...others }): IBoardCell => ({
             ...others,
             yPosition: yPosition < row ? yPosition + 1 : yPosition,
           }),
