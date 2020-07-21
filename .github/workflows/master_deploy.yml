@@ -10,23 +10,18 @@ jobs:
       matrix:
         node-version: [12.x]
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install Packages
+      - name: Install Packages 🔧
         run: yarn install
-      - name: Deploy to GH Pages
-        run: |
-          git config --global user.name $user_name
-          git config --global user.email $user_email
-          git remote set-url origin https://${github_token}@github.com/${repository}
-          yarn deploy
-        env:
-          user_name: ${{ secrets.USERNAME }}
-          user_email: ${{ secrets.EMAIL_ADDRESS }}
-          github_token: ${{ secrets.ACCESS_TOKEN_FOR_GITHUB_PAGES }}
-          repository: ${{ github.repository }}
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_FOR_GITHUB_PAGES }}
+          BRANCH: gh-pages
+          FOLDER: build
       - name: Updating Domain
         run: echo "Update domain"
