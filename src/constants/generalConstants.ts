@@ -1,5 +1,7 @@
 export const NORMAL_GAME_SPEED = 1000;
 
+export const GAME_START_STOP_KEY = 'p';
+
 // these color codes are taken from https://jariz.github.io/vibrant.js/
 export const TETROMINO_COLOR_PALLETTE = [
   '#f8b800',

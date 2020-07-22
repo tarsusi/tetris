@@ -3,22 +3,23 @@ import React, { Component } from 'react';
 import GameBoard from 'components/game-board/GameBoard';
 import KeyboardManager from 'components/keyboard-manager/KeyboardManager';
 
-import BaseTetromino from 'utils/tetrominoes/BaseTetromino';
 import {
   moveDown,
-  moveLeft,
-  moveRight,
   checkCollision,
   getNeighborCells,
   clearFullRows,
   generateTetromino,
   toGameSpeed,
+  computeNewPosition,
 } from 'utils/cellUtil';
 
-import './play.scss';
 import { SpeedSetting } from 'types';
 import { IPlayProps } from 'types/interfaces/IPlayProps';
 import { IPlayState } from 'types/interfaces/IPlayState';
+
+import { GAME_START_STOP_KEY } from 'constants/generalConstants';
+
+import './play.scss';
 
 class Play extends Component<IPlayProps, IPlayState> {
   state: IPlayState = {
@@ -29,8 +30,8 @@ class Play extends Component<IPlayProps, IPlayState> {
     tetromino: undefined,
   };
 
-  lastTime: number = 0;
   animationFrame: number = -1;
+  lastTime: number = 0;
 
   componentDidMount() {
     if (this.state.isGameStart) {
@@ -111,10 +112,16 @@ class Play extends Component<IPlayProps, IPlayState> {
 
   onKeysChanged = (keys: String[], speed: SpeedSetting) => {
     this.setState(
-      ({ tetromino }) => {
+      ({ tetromino, cells }) => {
         if (tetromino) {
           return {
-            tetromino: this.computeNewPosition(tetromino, keys),
+            tetromino: computeNewPosition(
+              tetromino,
+              keys,
+              cells,
+              this.props.cellRowCount,
+              this.props.cellColCount,
+            ),
             pressedKeys: keys,
           };
         }
@@ -124,70 +131,11 @@ class Play extends Component<IPlayProps, IPlayState> {
         };
       },
       () => {
-        if (keys.includes('p') || keys.includes('p')) {
+        if (keys.includes(GAME_START_STOP_KEY)) {
           this.toggleGameStart(speed);
         }
       },
     );
-  };
-
-  computeNewPosition = (
-    tetromino: BaseTetromino,
-    pressedKeys: String[],
-  ): BaseTetromino => {
-    let newTetromino: BaseTetromino | null = tetromino;
-
-    if (newTetromino) {
-      if (
-        pressedKeys.includes('ArrowRight') &&
-        !checkCollision(
-          getNeighborCells(newTetromino.getCells(), 1, 0),
-          this.state.cells,
-          this.props.cellRowCount,
-          this.props.cellColCount,
-        )
-      ) {
-        newTetromino = moveRight(tetromino, this.props.cellColCount);
-      }
-
-      if (
-        pressedKeys.includes('ArrowLeft') &&
-        !checkCollision(
-          getNeighborCells(newTetromino.getCells(), -1, 0),
-          this.state.cells,
-          this.props.cellRowCount,
-          this.props.cellColCount,
-        )
-      ) {
-        newTetromino = moveLeft(newTetromino);
-      }
-
-      if (
-        pressedKeys.includes('ArrowDown') &&
-        !checkCollision(
-          getNeighborCells(newTetromino.getCells(), 0, 1),
-          this.state.cells,
-          this.props.cellRowCount,
-          this.props.cellColCount,
-        )
-      ) {
-        newTetromino = moveDown(newTetromino, this.props.cellRowCount);
-      }
-
-      if (
-        pressedKeys.includes('ArrowUp') &&
-        !checkCollision(
-          newTetromino.getNextStateCells(),
-          this.state.cells,
-          this.props.cellRowCount,
-          this.props.cellColCount,
-        )
-      ) {
-        newTetromino = tetromino.nextState();
-      }
-    }
-
-    return newTetromino;
   };
 
   toggleGameStart = (speed: SpeedSetting) => {
@@ -216,6 +164,19 @@ class Play extends Component<IPlayProps, IPlayState> {
     );
   };
 
+  renderGameOverState = () => {
+    return (
+      <div className="game-over-container">
+        <div className="game-over-title">Game Over</div>
+        <div
+          className="game-over-restart"
+          onClick={() => this.restartGame(this.props.speed)}
+        >
+          Restart
+        </div>
+      </div>
+    );
+  };
   render() {
     const {
       cells,
@@ -227,17 +188,9 @@ class Play extends Component<IPlayProps, IPlayState> {
 
     return (
       <div className="play-container">
-        {(isGameOver && (
-          <div className="game-over-container">
-            <div className="game-over-title">Game Over</div>
-            <div
-              className="game-over-restart"
-              onClick={() => this.restartGame(this.props.speed)}
-            >
-              Restart
-            </div>
-          </div>
-        )) || (
+        {isGameOver ? (
+          this.renderGameOverState()
+        ) : (
           <>
             <div className="start-stop-button-container">
               <div className="start-stop-button-title">

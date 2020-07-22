@@ -166,3 +166,65 @@ export const toGameSpeed = (speed: SpeedSetting) => {
 
   return NORMAL_GAME_SPEED / 2;
 };
+
+export const computeNewPosition = (
+  tetromino: BaseTetromino,
+  pressedKeys: String[],
+  cells: IBoardCell[],
+  cellRowCount: number,
+  cellColCount: number,
+): BaseTetromino => {
+  let newTetromino: BaseTetromino | null = tetromino;
+
+  if (newTetromino) {
+    if (
+      pressedKeys.includes('ArrowRight') &&
+      !checkCollision(
+        getNeighborCells(newTetromino.getCells(), 1, 0),
+        cells,
+        cellRowCount,
+        cellColCount,
+      )
+    ) {
+      newTetromino = moveRight(tetromino, cellColCount);
+    }
+
+    if (
+      pressedKeys.includes('ArrowLeft') &&
+      !checkCollision(
+        getNeighborCells(newTetromino.getCells(), -1, 0),
+        cells,
+        cellRowCount,
+        cellColCount,
+      )
+    ) {
+      newTetromino = moveLeft(newTetromino);
+    }
+
+    if (
+      pressedKeys.includes('ArrowDown') &&
+      !checkCollision(
+        getNeighborCells(newTetromino.getCells(), 0, 1),
+        cells,
+        cellRowCount,
+        cellColCount,
+      )
+    ) {
+      newTetromino = moveDown(newTetromino, cellRowCount);
+    }
+
+    if (
+      pressedKeys.includes('ArrowUp') &&
+      !checkCollision(
+        newTetromino.getNextStateCells(),
+        cells,
+        cellRowCount,
+        cellColCount,
+      )
+    ) {
+      newTetromino = tetromino.nextState();
+    }
+  }
+
+  return newTetromino;
+};
